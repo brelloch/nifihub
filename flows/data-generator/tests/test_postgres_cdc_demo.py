@@ -258,6 +258,9 @@ class TestGroovyScript:
     def test_script_has_delete_operations(self, groovy_script):
         assert "'DELETE'" in groovy_script or "\"DELETE\"" in groovy_script
 
+    def test_script_generates_product_reviews(self, groovy_script):
+        assert "target_table: 'product_reviews'" in groovy_script or "target_table: \"product_reviews\"" in groovy_script
+
 
 class TestInitSQL:
     @pytest.fixture
@@ -292,6 +295,12 @@ class TestInitSQL:
         assert "customers" in pub_section.lower()
         assert "orders" in pub_section.lower()
         assert "order_items" in pub_section.lower()
+        assert "product_reviews" in pub_section.lower()
+
+    def test_creates_product_reviews_table(self, init_sql):
+        assert "product_reviews" in init_sql.lower()
+        assert "review_id" in init_sql.lower()
+        assert "rating" in init_sql.lower()
 
     def test_no_replica_identity_full(self, init_sql):
         assert "REPLICA IDENTITY FULL" not in init_sql, (
